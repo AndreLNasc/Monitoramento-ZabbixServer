@@ -3,7 +3,7 @@ import logging
 from typing import Optional
 import requests
 from dotenv import load_dotenv
-
+import sys
 # Load environment variables from .env file
 load_dotenv()
 
@@ -16,8 +16,15 @@ file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
 logger.addHandler(file_handler)
 
+
+# Define the base path for the executable location
+if getattr(sys, 'frozen', False):  # Check if the script is running in a bundle (PyInstaller)
+    base_path = os.path.dirname(sys.executable)
+else:
+    base_path = os.path.dirname(__file__)
+
 # File to store previously sent alerts
-SENT_ALERTS_FILE = os.path.join(os.path.dirname(__file__), "sent_alerts.txt")
+SENT_ALERTS_FILE = os.path.join(base_path, "sent_alerts.txt")
 
 def load_sent_alerts() -> set:
    """Load the set of previously sent alerts from the file."""
@@ -78,7 +85,6 @@ def main():
         page.wait_for_load_state('networkidle')
         logger.info("Locating rows with high priority alerts...")
         rows = page.locator('tr:has(td.high-bg)')
-
         # Iterate over each row and extract the data
         logger.info(f"Total rows found: {rows.count()}")
         for i in range(rows.count()):
@@ -86,7 +92,6 @@ def main():
             row = rows.nth(i)
             columns = row.locator('td')
             data = [columns.nth(j).inner_text() for j in range(columns.count())]
-            
             if len(data) == 9:
                 logger.info(f"Data extracted from row {i + 1}: {data}")
                 alert_id = generate_alert_id(data)

@@ -12,3 +12,4 @@ playwright.config.ts
 tests/
 tests-examples/
 build/
+monitoramento_zabbix.log
