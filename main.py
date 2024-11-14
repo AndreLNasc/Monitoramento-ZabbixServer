@@ -84,7 +84,7 @@ def main():
         page.goto(os.getenv("URL_DASHBOARD_ZABBIX").strip())
         page.wait_for_load_state('networkidle')
         logger.info("Locating rows with high priority alerts...")
-        rows = page.locator('tr:has(td.high-bg)')
+        rows = page.locator('tr:has(td.high-bg), tr:has(td.disaster-bg)')
         # Iterate over each row and extract the data
         logger.info(f"Total rows found: {rows.count()}")
         for i in range(rows.count()):
