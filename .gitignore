@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+.env
+package-lock.json
+package.json
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+playwright.config.ts
+tests/
+tests-examples/
+build/
