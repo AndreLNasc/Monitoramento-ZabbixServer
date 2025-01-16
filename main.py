@@ -66,7 +66,7 @@ def main():
     # Initialize Playwright
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, args=["--headless=new", "--disable-gpu", "--no-sandbox"])
+        browser = p.chromium.launch(args=["--headless=new", "--disable-gpu", "--no-sandbox"], channel=f"{os.getenv('BROWSER')}")
         page = browser.new_page()
 
         # Access the login page
