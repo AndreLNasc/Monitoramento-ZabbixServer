@@ -66,12 +66,12 @@ def main():
     # Initialize Playwright
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, channel=os.getenv("BROWSER").strip())
+        browser = p.chromium.launch(headless=True, args=["--headless=new", "--disable-gpu", "--no-sandbox"])
         page = browser.new_page()
 
         # Access the login page
         logger.info("Accessing the Zabbix login page...")
-        page.goto(os.getenv("URL_LOGIN_ZABBIX").strip())
+        page.goto(os.getenv("URL_LOGIN_ZABBIX").strip(), timeout=60000)
         
         # Fill in the login form
         logger.info("Filling in the login form...")
@@ -100,7 +100,7 @@ def main():
                 # Check if the alert has already been sent
                 if alert_id not in sent_alerts:
                     err = send_teams_message(data)
-                    if err:
+                    if err: 
                         raise Exception("Error sending message to Teams: ", err)
                     
                     # Save the alert as sent
